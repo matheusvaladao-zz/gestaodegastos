@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+
+  db:
+    image: mysql:5.7
+    container_name: mysql
+    expose: 
+      - 3307
+    ports:
+      - 3307:3306
+    environment: 
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=gestaodegastos
+    volumes:
+      - ./data/mysql/:/var/lib/mysql/
+
+  mensageria:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    expose:
+      - 15672
+    ports:
+      - 5672:5672
+      - 15672:15672
+    
