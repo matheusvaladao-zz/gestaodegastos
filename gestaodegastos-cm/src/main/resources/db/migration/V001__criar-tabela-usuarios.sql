@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS usuarios (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(70) NOT NULL,
+  email VARCHAR(70) NOT NULL,
+  senha VARCHAR(150) NOT NULL,
+  PRIMARY KEY (id)
+)
+ENGINE = InnoDB default charset=utf8;
