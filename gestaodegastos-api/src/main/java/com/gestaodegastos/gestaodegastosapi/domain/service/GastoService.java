@@ -7,8 +7,11 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gestaodegastos.gestaodegastosapi.api.model.Gasto;
-import com.gestaodegastos.gestaodegastosapi.core.QueueProperties;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gestaodegastos.gestaodegastosapi.api.model.input.GastoInput;
+import com.gestaodegastos.gestaodegastosapi.core.queue.QueueProperties;
+import com.gestaodegastos.gestaodegastosapi.domain.model.input.GastoModelInput;
+import com.gestaodegastos.gestaodegastosapi.domain.model.output.GastoModelOutput;
 
 @Service
 public class GastoService {
@@ -19,24 +22,34 @@ public class GastoService {
 	@Autowired
 	QueueProperties queueProperties;
 
-	public Gasto obterGasto(Long id) {
+	@Autowired
+	ObjectMapper mapper;
+
+	public GastoInput obterGasto(Long id) {
 		return null;
 	}
 
-	public List<Gasto> listarGastos() {
-		rabbitTemplate.convertAndSend(queueProperties.listarGastos, "Teste");
+	public List<GastoInput> listarGastos() {
 		return null;
 	}
 
-	public List<Gasto> listarGastosPorData(OffsetDateTime data) {
+	public List<GastoInput> listarGastosPorData(OffsetDateTime data) {
 		return null;
 	}
 
-	public Gasto salvarGasto(Gasto gasto) {
-		return null;
+	public GastoModelOutput salvarGasto(GastoModelInput gastoModelInput) {
+		try {
+			String replyMessage = (String) rabbitTemplate.convertSendAndReceive(queueProperties.cadastrarGasto,
+					mapper.writeValueAsString(gastoModelInput));
+			GastoModelOutput gastoModelOutput = mapper.readValue(replyMessage, GastoModelOutput.class);
+			return gastoModelOutput;
+
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
-	public Gasto alterarGasto(Long id, Gasto gasto) {
+	public GastoInput alterarGasto(Long id, GastoInput gasto) {
 		return null;
 	}
 }

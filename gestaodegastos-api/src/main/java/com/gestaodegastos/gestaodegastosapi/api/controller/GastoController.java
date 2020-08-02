@@ -8,13 +8,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gestaodegastos.gestaodegastosapi.api.model.Gasto;
+import com.gestaodegastos.gestaodegastosapi.api.controller.assembler.GastoInputDisassembler;
+import com.gestaodegastos.gestaodegastosapi.api.model.input.GastoInput;
+import com.gestaodegastos.gestaodegastosapi.domain.model.input.GastoModelInput;
+import com.gestaodegastos.gestaodegastosapi.domain.model.input.SistemaModelIdInput;
+import com.gestaodegastos.gestaodegastosapi.domain.model.output.GastoModelOutput;
 import com.gestaodegastos.gestaodegastosapi.domain.service.GastoService;
 
 @RestController
@@ -24,31 +27,33 @@ public class GastoController {
 	@Autowired
 	GastoService gastoService;
 
+	@Autowired
+	GastoInputDisassembler gastoInputDisassembler;
+
 	@GetMapping("/{id}")
-	public Gasto obterGasto(@PathVariable Long id) {
+	public GastoInput obterGasto(@PathVariable Long id) {
 		return gastoService.obterGasto(id);
 	}
 
 	@GetMapping
-	public List<Gasto> listarGastos() {
+	public List<GastoInput> listarGastos() {
 		return gastoService.listarGastos();
 	}
 
 	@GetMapping("/{dataString}")
-	public List<Gasto> listarGastosPorData(@PathVariable String dataString) {
+	public List<GastoInput> listarGastosPorData(@PathVariable String dataString) {
 		OffsetDateTime data = OffsetDateTime.now();
 		return gastoService.listarGastosPorData(data);
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Gasto cadastrarGasto(@RequestBody Gasto gasto) {
-		return gastoService.salvarGasto(gasto);
-	}
-
-	@PutMapping("/{id}")
-	public Gasto alterarGasto(@PathVariable Long id, @RequestBody Gasto gasto) {
-		return gastoService.alterarGasto(id, gasto);
+	public GastoModelOutput cadastrarGasto(@RequestBody GastoInput gastoInput) {
+		GastoModelInput gastoModelInput = gastoInputDisassembler.toDomainObject(gastoInput);
+		SistemaModelIdInput sistema = new SistemaModelIdInput();
+		sistema.setId(1L);
+		gastoModelInput.setSistema(sistema);
+		return gastoService.salvarGasto(gastoModelInput);
 	}
 
 }

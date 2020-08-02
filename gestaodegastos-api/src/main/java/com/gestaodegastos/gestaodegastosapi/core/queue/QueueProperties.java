@@ -1,4 +1,4 @@
-package com.gestaodegastos.gestaodegastoscm.core;
+package com.gestaodegastos.gestaodegastosapi.core.queue;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

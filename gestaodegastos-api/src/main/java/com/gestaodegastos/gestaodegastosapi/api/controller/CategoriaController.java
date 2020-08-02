@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gestaodegastos.gestaodegastosapi.api.model.Categoria;
+import com.gestaodegastos.gestaodegastosapi.api.model.input.CategoriaInput;
 import com.gestaodegastos.gestaodegastosapi.domain.service.CategoriaService;
 
 @RestController
@@ -18,7 +18,7 @@ public class CategoriaController {
 	private CategoriaService categoriaService;
 
 	@GetMapping("/sugestoes/{texto}")
-	public List<Categoria> listarSugestoesDeCategorias(String texto) {
+	public List<CategoriaInput> listarSugestoesDeCategorias(String texto) {
 		return categoriaService.listarSugestoesDeCategorias(texto);
 	}
 

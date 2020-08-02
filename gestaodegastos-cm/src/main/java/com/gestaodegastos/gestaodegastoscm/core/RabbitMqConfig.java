@@ -47,8 +47,23 @@ public class RabbitMqConfig {
 	}
 
 	@Bean
+	public Queue cadastrarGasto() {
+		return new Queue(queueProperties.cadastrarGasto, true, false, false);
+	}
+
+	@Bean
+	public Queue obterGastos() {
+		return new Queue(queueProperties.obterGasto, true, false, false);
+	}
+
+	@Bean
 	public Queue listarGastos() {
 		return new Queue(queueProperties.listarGastos, true, false, false);
+	}
+
+	@Bean
+	public Queue listarCategorias() {
+		return new Queue(queueProperties.listarCategorias, true, false, false);
 	}
 
 }

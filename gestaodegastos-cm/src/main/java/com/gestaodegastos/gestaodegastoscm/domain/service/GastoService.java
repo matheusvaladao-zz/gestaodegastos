@@ -1,15 +1,22 @@
 package com.gestaodegastos.gestaodegastoscm.domain.service;
 
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.messaging.handler.annotation.Payload;
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.gestaodegastos.gestaodegastoscm.domain.model.Gasto;
+import com.gestaodegastos.gestaodegastoscm.domain.repository.GastoRepository;
 
 @Service
 public class GastoService {
 
-	@RabbitListener(queues = "${fila.listarGastos}")
-	public void receive(@Payload String fileBody) {
-		System.out.println("Comunicação feita: " +fileBody);
+	@Autowired
+	private GastoRepository gastoRepository;
+
+	@Transactional
+	public Gasto salvarGasto(Gasto gasto) {
+		return gastoRepository.save(gasto);
 	}
 
 }
